@@ -8,12 +8,11 @@ import view.View;
 import java.io.IOException;
 
 public class Delete extends AbstractCommand implements Command{
-    private final View view;
 
-    public Delete(View view) {
-        super(view);
-        this.view = view;
-    }
+    private View view;
+    private OrderService orderService;
+    private PetService petService;
+    private UserService userService;
 
     private static final String MENU = """
             Please, enter the number according to list below
@@ -22,6 +21,14 @@ public class Delete extends AbstractCommand implements Command{
             3 - to delete order
             return - go back to main menu
             """;
+
+    public Delete(View view, OrderService orderService, PetService petService, UserService userService) {
+        super(view);
+        this.view = view;
+        this.orderService = orderService;
+        this.petService = petService;
+        this.userService = userService;
+    }
 
     @Override
     public String commandName() {
@@ -48,7 +55,7 @@ public class Delete extends AbstractCommand implements Command{
         view.write("Enter user name you would like to delete");
         String userName = view.read();
         try {
-            ApiResponse apiResponse = UserService.delete(userName);
+            ApiResponse apiResponse = userService.delete(userName);
             resultOutput(apiResponse);
         } catch (IOException | InterruptedException ex) {
             view.write(ex.getMessage());
@@ -58,7 +65,7 @@ public class Delete extends AbstractCommand implements Command{
     private void deletePet() {
         int id = readIntegerFromConsole("Enter pet id you would like to delete");
         try {
-            ApiResponse apiResponse = PetService.delete(id);
+            ApiResponse apiResponse = petService.delete(id);
             resultOutput(apiResponse);
         } catch (IOException | InterruptedException ex) {
             view.write(ex.getMessage());
@@ -74,7 +81,7 @@ public class Delete extends AbstractCommand implements Command{
                 return;
             } else {
                 try {
-                    ApiResponse apiResponse = OrderService.delete(id);
+                    ApiResponse apiResponse = orderService.delete(id);
                     if (apiResponse.getCode() == 200) {
                         view.write("Deleted successfully");
                         running = false;

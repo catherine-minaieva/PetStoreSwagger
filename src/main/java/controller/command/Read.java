@@ -14,12 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Read extends AbstractCommand implements Command{
-    private final View view;
+    private View view;
+    private OrderService orderService;
+    private PetService petService;
+    private UserService userService;
 
-    public Read(View view) {
-        super(view);
-        this.view = view;
-    }
     private static final String MENU = """
             Please, enter the number according to list below
             1 - to get user info
@@ -39,6 +38,15 @@ public class Read extends AbstractCommand implements Command{
             2 - to get purchase order by id
             return - go back to main menu
             """;
+
+    public Read(View view, OrderService orderService, PetService petService, UserService userService) {
+        super(view);
+        this.view = view;
+        this.orderService = orderService;
+        this.petService = petService;
+        this.userService = userService;
+    }
+
     @Override
     public String commandName() {
         return "read";
@@ -64,7 +72,7 @@ public class Read extends AbstractCommand implements Command{
         view.write("Enter user name");
         String userName = view.read();
         try {
-            User user = UserService.getUserByName(userName);
+            User user = userService.getUserByName(userName);
             view.write("Founded user:\n" + user);
         } catch (IOException | InterruptedException ex) {
             view.write(ex.getMessage());
@@ -88,7 +96,7 @@ public class Read extends AbstractCommand implements Command{
     private void getPetByStatus() {
         PetStatus status = readPetStatusFromConsole();
         try {
-            List<Pet> pets = PetService.getPetByStatus(status);
+            List<Pet> pets = petService.getPetByStatus(status);
             pets.forEach(pet -> view.write(pet.toString()));
         } catch (IOException | InterruptedException ex) {
             view.write(ex.getMessage());
@@ -98,7 +106,7 @@ public class Read extends AbstractCommand implements Command{
     private void getPetById() {
         int id = readIntegerFromConsole("Enter pet id");
         try {
-            Pet pet = PetService.getPetById(id);
+            Pet pet = petService.getPetById(id);
             view.write("Founded pet:\n" + pet);
         } catch (IOException | InterruptedException ex) {
             view.write(ex.getMessage());
@@ -121,7 +129,7 @@ public class Read extends AbstractCommand implements Command{
 
     private void getInventoriesByStatus() {
         try {
-            HashMap<String, Integer> inventories = OrderService.getInventoriesByStatus();
+            HashMap<String, Integer> inventories = orderService.getInventoriesByStatus();
             inventories.entrySet().forEach(status -> view.write(status.toString()));
         } catch (IOException | InterruptedException ex) {
             view.write(ex.getMessage());
@@ -136,7 +144,7 @@ public class Read extends AbstractCommand implements Command{
                 view.write("Wrong data, please, enter order id in range 1-10");
             } else {
                 try {
-                    Order order = OrderService.getOrderById(id);
+                    Order order = orderService.getOrderById(id);
                     view.write("Founded order:\n" + order);
                     running = false;
                 } catch (IOException | InterruptedException ex) {
@@ -145,5 +153,4 @@ public class Read extends AbstractCommand implements Command{
             }
         }
     }
-
 }

@@ -15,12 +15,10 @@ import java.util.List;
 
 public class Create extends AbstractCommand implements Command {
 
-    private final View view;
-
-    public Create(View view) {
-        super(view);
-        this.view = view;
-    }
+    private View view;
+    private OrderService orderService;
+    private PetService petService;
+    private UserService userService;
 
     private static final String MENU = """
             Please, enter the number according to list below
@@ -35,6 +33,14 @@ public class Create extends AbstractCommand implements Command {
             2 - create users with list
             return - go back to main menu
             """;
+
+    public Create(View view, OrderService orderService, PetService petService, UserService userService) {
+        super(view);
+        this.view = view;
+        this.orderService = orderService;
+        this.petService = petService;
+        this.userService = userService;
+    }
 
     @Override
     public String commandName() {
@@ -74,7 +80,7 @@ public class Create extends AbstractCommand implements Command {
     private void createSingleUser() {
         User user = readUserFromConsole();
         try {
-            ApiResponse apiResponse = UserService.createUser(user);
+            ApiResponse apiResponse = userService.createUser(user);
             resultOutput(apiResponse);
         } catch (IOException | InterruptedException ex) {
             view.write(ex.getMessage());
@@ -102,7 +108,7 @@ public class Create extends AbstractCommand implements Command {
             }
         }
         try {
-            ApiResponse apiResponse = UserService.createUserArray(users);
+            ApiResponse apiResponse = userService.createUserArray(users);
             if (apiResponse.getCode() == 200) {
                 view.write("Users :");
                 users.forEach(u -> view.write(u.toString()));
@@ -120,7 +126,7 @@ public class Create extends AbstractCommand implements Command {
     private void createPet() {
         Pet pet = readPetFromConsole();
         try {
-            Pet created = PetService.createPet(pet);
+            Pet created = petService.createPet(pet);
             view.write(created + """
                                             
                     was successfully created""");
@@ -132,7 +138,7 @@ public class Create extends AbstractCommand implements Command {
     private void createOrder() {
         Order order = readOrderFromConsole();
         try {
-            Order created = OrderService.createOrder(order);
+            Order created = orderService.createOrder(order);
             view.write(created + """
                                             
                     was successfully created""");
