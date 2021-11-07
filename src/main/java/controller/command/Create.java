@@ -78,7 +78,7 @@ public class Create extends AbstractCommand implements Command {
     }
 
     private void createSingleUser() {
-        User user = readUserFromConsole();
+        User user = readUsers();
         try {
             ApiResponse apiResponse = userService.createUser(user);
             resultOutput(apiResponse);
@@ -95,7 +95,7 @@ public class Create extends AbstractCommand implements Command {
                 Please, enter the user info according to requests below
                 Enter 'ok' when finish""");
         while (running) {
-            user = readUserFromConsole();
+            user = readUsers();
             users.add(user);
             view.write(user + """
                                                 
@@ -124,7 +124,7 @@ public class Create extends AbstractCommand implements Command {
     }
 
     private void createPet() {
-        Pet pet = readPetFromConsole();
+        Pet pet = readPets();
         try {
             Pet created = petService.createPet(pet);
             view.write(created + """
@@ -136,7 +136,7 @@ public class Create extends AbstractCommand implements Command {
     }
 
     private void createOrder() {
-        Order order = readOrderFromConsole();
+        Order order = readOrder();
         try {
             Order created = orderService.createOrder(order);
             view.write(created + """

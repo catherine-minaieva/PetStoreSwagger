@@ -65,7 +65,7 @@ public class Update extends AbstractCommand implements Command {
         } catch (IOException | InterruptedException ex) {
             view.write(ex.getMessage());
         }
-        User user = readUserFromConsole();
+        User user = readUsers();
         try {
             ApiResponse apiResponse = userService.updateUser(userName, user);
             resultOutput(apiResponse);
@@ -75,12 +75,12 @@ public class Update extends AbstractCommand implements Command {
     }
 
     private void updatePet() {
-        int id = readIntegerFromConsole("Enter pet id you would like to update");
+        int id = readNumbers("Enter pet id you would like to update");
         try {
             Pet petToUpdate = petService.getPetById(id);
             view.write("Enter pet new name");
             String newName = view.read();
-            PetStatus newStatus = readPetStatusFromConsole();
+            PetStatus newStatus = readPetStatus();
             petToUpdate.setName(newName);
             petToUpdate.setStatus(newStatus);
             ApiResponse apiResponse = petService.updatePet(id, petToUpdate);
@@ -91,10 +91,10 @@ public class Update extends AbstractCommand implements Command {
     }
 
     private void addPhotos() {
-        int id = readIntegerFromConsole("Enter pet id you would like to update");
+        int id = readNumbers("Enter pet id you would like to update");
         view.write("Enter description to photo");
         String metaData = view.read();
-        File image = readFileFromConsole();
+        File image = readFile();
         try {
             ApiResponse apiResponse = petService.uploadImage(id, metaData, image);
             resultOutput(apiResponse);

@@ -20,7 +20,7 @@ public abstract class AbstractCommand {
         this.view = view;
     }
 
-    public int readIntegerFromConsole(String message) {
+    public int readNumbers(String message) {
         int number = 0;
         boolean isFieldBlank = true;
         while (isFieldBlank) {
@@ -39,8 +39,8 @@ public abstract class AbstractCommand {
         return number;
     }
 
-    public User readUserFromConsole() {
-        int id = readIntegerFromConsole("Enter user id");
+    public User readUsers() {
+        int id = readNumbers("Enter user id");
         view.write("Enter user name");
         String userName = view.read();
         view.write("Enter user first name");
@@ -53,33 +53,33 @@ public abstract class AbstractCommand {
         String password = view.read();
         view.write("Enter user phone number");
         String phone = view.read();
-        int status = readIntegerFromConsole("Enter user status");
+        int status = readNumbers("Enter user status");
         return new User(id, userName, firstName, lastName, email, password, phone, status);
     }
 
-    public Pet readPetFromConsole() {
-        int id = readIntegerFromConsole("Enter pet id");
-        Category category = readCategoryFromConsole();
+    public Pet readPets() {
+        int id = readNumbers("Enter pet id");
+        Category category = readCategories();
         view.write("Enter pet name");
         String name = view.read();
-        List<String> photoUrls = readPhotoUrlsFromConsole();
-        List<Tag> tags = readTagsFromConsole();
-        PetStatus status = readPetStatusFromConsole();
+        List<String> photoUrls = readPhotoUrls();
+        List<Tag> tags = readTags();
+        PetStatus status = readPetStatus();
         return new Pet(id, category, name, photoUrls, tags, status);
     }
 
-    private Category readCategoryFromConsole() {
-        int id = readIntegerFromConsole("Enter category id");
+    private Category readCategories() {
+        int id = readNumbers("Enter category id");
         view.write("Enter category name");
         String name = view.read();
         return new Category(id, name);
     }
 
-    private List<Tag> readTagsFromConsole() {
+    private List<Tag> readTags() {
         List<Tag> tags = new ArrayList<>();
         boolean running = true;
         while (running) {
-            tags.add(readTagFromConsole());
+            tags.add(readTag());
             view.write("Successfully added.Press 'enter' to continue\nEnter 'ok' when finish");
             if (view.read().equalsIgnoreCase("ok")) {
                 running = false;
@@ -88,7 +88,7 @@ public abstract class AbstractCommand {
         return tags;
     }
 
-    public List<String> readPhotoUrlsFromConsole() {
+    public List<String> readPhotoUrls() {
         List<String> photoUrls = new ArrayList<>();
         boolean running = true;
         while (running) {
@@ -102,7 +102,7 @@ public abstract class AbstractCommand {
         return photoUrls;
     }
 
-    public File readFileFromConsole() {
+    public File readFile() {
         File image = null;
         boolean isFieldBlank = true;
         while (isFieldBlank) {
@@ -126,24 +126,24 @@ public abstract class AbstractCommand {
         return image;
     }
 
-    public Tag readTagFromConsole() {
-        int id = readIntegerFromConsole("Enter tag id");
+    public Tag readTag() {
+        int id = readNumbers("Enter tag id");
         view.write("Enter tag name");
         String name = view.read();
         return new Tag(id, name);
     }
 
-    public Order readOrderFromConsole() {
-        int id = readIntegerFromConsole("Enter order id");
-        int petId = readIntegerFromConsole("Enter pet id");
-        int quantity = readIntegerFromConsole("Enter quantity");
+    public Order readOrder() {
+        int id = readNumbers("Enter order id");
+        int petId = readNumbers("Enter pet id");
+        int quantity = readNumbers("Enter quantity");
         String shipDate = LocalDate.now().toString();
-        OrderStatus status = readOrderStatusFromConsole();
-        boolean complete = readBooleanFromConsole();
+        OrderStatus status = readOrderStatus();
+        boolean complete = readBoolean();
         return new Order(id, petId, quantity, shipDate, status, complete);
     }
 
-    public OrderStatus readOrderStatusFromConsole() {
+    public OrderStatus readOrderStatus() {
         OrderStatus orderStatus = null;
         boolean isFieldBlank = true;
         while (isFieldBlank) {
@@ -159,7 +159,7 @@ public abstract class AbstractCommand {
         return orderStatus;
     }
 
-    public PetStatus readPetStatusFromConsole() {
+    public PetStatus readPetStatus() {
         PetStatus orderStatus = null;
         boolean isFieldBlank = true;
         while (isFieldBlank) {
@@ -175,7 +175,7 @@ public abstract class AbstractCommand {
         return orderStatus;
     }
 
-    public boolean readBooleanFromConsole() {
+    public boolean readBoolean() {
         boolean complete = false;
         boolean isFieldBlank = true;
         while (isFieldBlank) {

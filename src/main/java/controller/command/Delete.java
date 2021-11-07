@@ -63,7 +63,7 @@ public class Delete extends AbstractCommand implements Command{
     }
 
     private void deletePet() {
-        int id = readIntegerFromConsole("Enter pet id you would like to delete");
+        int id = readNumbers("Enter pet id you would like to delete");
         try {
             ApiResponse apiResponse = petService.delete(id);
             resultOutput(apiResponse);
@@ -75,7 +75,7 @@ public class Delete extends AbstractCommand implements Command{
     private void deleteOrder() {
         boolean running = true;
         while (running) {
-            int id = readIntegerFromConsole("Enter order id to delete in range 1-10");
+            int id = readNumbers("Enter order id to delete in range 1-10");
             if (id < 1 || id > 10) {
                 view.write("Wrong data, please, enter order id in range 1-10");
                 return;
